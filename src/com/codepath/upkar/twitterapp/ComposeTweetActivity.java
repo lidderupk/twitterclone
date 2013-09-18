@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.codepath.upkar.twitterapp.models.Tweet;
 import com.codepath.upkar.twitterapp.models.TweetData;
+import com.codepath.upkar.twitterapp.util.Constants;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class ComposeTweetActivity extends Activity {
@@ -56,14 +57,15 @@ public class ComposeTweetActivity extends Activity {
 			public void onClick(View v) {
 				Log.d(tag, "Tweet button clicked");
 				String status = etTweetBody.getText().toString();
-				TwitterApp.getRestClient().postTweet(
+				TwitterApp.getRestClient().postTweet(status,
 						new JsonHttpResponseHandler() {
 							@Override
 							public void onSuccess(JSONObject returnObject) {
 								Log.d(tag, "onSuccess");
 								try {
 
-									Tweet fromJson = Tweet.fromJson(returnObject);
+									Tweet fromJson = Tweet
+											.fromJson(returnObject);
 									TweetData data = new TweetData();
 									JSONObject user = returnObject
 											.getJSONObject("user");
@@ -97,7 +99,7 @@ public class ComposeTweetActivity extends Activity {
 							public void onFailure(Throwable arg0, String arg1) {
 								Log.d(tag, "onFailure");
 							}
-						}, status);
+						});
 			}
 		};
 	}

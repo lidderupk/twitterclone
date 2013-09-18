@@ -30,5 +30,6 @@
     </style>
 
     <string name="tweet_compose_hint">Compose tweet here ...</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>

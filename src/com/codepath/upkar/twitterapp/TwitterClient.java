@@ -37,8 +37,8 @@ public class TwitterClient extends OAuthBaseClient {
 				REST_CONSUMER_SECRET, REST_CALLBACK_URL);
 	}
 
-	public void getHomeTimeLine(AsyncHttpResponseHandler handler,
-			boolean isFirstTimeCall) {
+	public void getHomeTimeLine(boolean isFirstTimeCall,
+			AsyncHttpResponseHandler handler) {
 		Log.d(tag, "getHomeTimeLine; isFirstTimeCall: " + isFirstTimeCall);
 		String url = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams("count", INITIAL_TWEET_COUNT);
@@ -50,14 +50,45 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(url, params, handler);
 	}
 
-	public void postTweet(AsyncHttpResponseHandler handler, String status) {
+	public void getMentions(boolean isFirstTimeCall,
+			AsyncHttpResponseHandler handler) {
+		Log.d(tag, "getHomeTimeLine; isFirstTimeCall: " + isFirstTimeCall);
+		String url = getApiUrl("statuses/mentions_timeline.json");
+		RequestParams params = new RequestParams("count", INITIAL_TWEET_COUNT);
+		if (!isFirstTimeCall) {
+			Log.d(tag, "calling again");
+			params.put("max_id", String.valueOf(maxId));
+		}
+
+		client.get(url, params, handler);
+	}
+	
+	public void getUserTimeline(boolean isFirstTimeCall,
+			AsyncHttpResponseHandler handler) {
+		Log.d(tag, "getHomeTimeLine; isFirstTimeCall: " + isFirstTimeCall);
+		String url = getApiUrl("statuses/user_timeline.json");
+		RequestParams params = new RequestParams("count", INITIAL_TWEET_COUNT);
+		if (!isFirstTimeCall) {
+			Log.d(tag, "calling again");
+			params.put("max_id", String.valueOf(maxId));
+		}
+
+		client.get(url, params, handler);
+	}
+
+	public void postTweet(String status, AsyncHttpResponseHandler handler) {
 		String url = getApiUrl("statuses/update.json");
 		RequestParams params = new RequestParams("status", status);
 		client.post(url, params, handler);
 	}
 
 	public void getAccountSettings(AsyncHttpResponseHandler handler) {
-		String url = "account/settings.json";
+		String url = getApiUrl("account/settings.json");
+		client.get(url, handler);
+	}
+
+	public void getVerifyCredentials(AsyncHttpResponseHandler handler) {
+		String url = getApiUrl("account/verify_credentials.json");
 		client.get(url, handler);
 	}
 
